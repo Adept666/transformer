@@ -1,17 +1,17 @@
 //Модуль построения графиков (заголовочный файл)
 //v0.001.
 
+struct color {
+	double r;
+	double g;
+	double b;
+};
+
 struct font {
 	char *name;
 	double size;
 	cairo_font_slant_t slant;
 	cairo_font_weight_t weight;
-};
-
-struct color {
-	double r;
-	double g;
-	double b;
 };
 
 struct graph_appearance {
@@ -31,12 +31,14 @@ struct graph_appearance {
 	guint distance_tick_labels_to_gridlines;
 };
 
-//!!!ГРАНИЦА ЧИСТОВОГО И ЧЕРНОВОГО КОДА:
-
-enum scale
-{
+enum scale {
 	LIN,
 	LOG
+};
+
+struct point {
+	double x;
+	double y;
 };
 
 struct graph {
@@ -46,12 +48,22 @@ struct graph {
 	unsigned int x_number_of_major_grids;
 	unsigned int y_number_of_minor_grids;
 	unsigned int x_number_of_minor_grids;
-	void *y_tick_labels;
-	void *x_tick_labels;	
+	char *y_tick_labels;	///!!!
+	char *x_tick_labels;	///!!!
 	char *y_axis_label;
 	char *x_axis_label;
+	double y_value_min;
+	double y_value_max;
+	double x_value_min;
+	double x_value_max;
+	unsigned int trace_number_of_points;
+	struct point *trace_points;
 };
 
+//!!!ГРАНИЦА ЧИСТОВОГО И ЧЕРНОВОГО КОДА:
+void graph_appearance_set (struct graph_appearance new_graph_appearance);
+void graph_plot (GtkDrawingArea *area, struct graph new_graph);
+void graph_delete (GtkDrawingArea *area);
 void graph_memory_free ();
-void graph_set_appearance (struct graph_appearance new_graph_appearance);
-void graph (GtkDrawingArea *area, struct graph new_graph);
+//!!!Временно:
+void char_array_print ();

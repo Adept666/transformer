@@ -210,15 +210,9 @@ static void menu_main_response(GtkWidget *menu_item, gpointer data)
 //Функция запуска расчёта:
 static void start_calculation(GtkWidget *button, gpointer data)
 {
-	struct graph graph1;	//(36)
-	graph1.y_scale = LIN;
-	graph1.x_scale = LIN;
-	graph(GTK_DRAWING_AREA(drawing_area_graph1), graph1);	//(36)
+//!!!Проверка освобождения памяти:
+graph_memory_free();
 
-	struct graph graph3;	//(36)
-	graph3.y_scale = LIN;
-	graph3.x_scale = LIN;
-	graph(GTK_DRAWING_AREA(drawing_area_graph2), graph3);	//(36)
 
 	//Вывод сообщения о запуске расчёта:
 	console_print("Расчёт запущен");
@@ -1109,7 +1103,7 @@ int main(int argc, char *argv[])
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu_main_file), menu_item_main);
 	g_signal_connect(menu_item_main, "activate", G_CALLBACK(menu_main_response), "Save");
 	gtk_box_pack_start(GTK_BOX(vbox_main), menu_bar_main, FALSE, FALSE, 0);
-/*
+
 	//Виджеты для ввода исходных данных:
 	GtkWidget *vbox_input, *hbox_input, *label_input;
 	//Виджеты entry объявлены как глобальные переменые
@@ -1271,7 +1265,7 @@ int main(int argc, char *argv[])
 	text_buffer_console = gtk_text_view_get_buffer(GTK_TEXT_VIEW(text_view_console));
 	gtk_text_buffer_get_iter_at_offset(text_buffer_console, &text_iter_console, 0);
 	gtk_container_add(GTK_CONTAINER(scrolled_window_console), text_view_console);
-*/
+
 	//Рамка frame1 для области рисования drawing_area_graph1:(36)
 	GtkWidget *frame1;
 	frame1 = gtk_frame_new(NULL);
@@ -1306,32 +1300,32 @@ int main(int argc, char *argv[])
 	gtk_container_add(GTK_CONTAINER(frame3), drawing_area_graph3);
 
 struct graph_appearance default_graph_appearance;	//(36)
-default_graph_appearance.background_color.r = 0.5;
-default_graph_appearance.background_color.g = 0.5;
-default_graph_appearance.background_color.b = 0.0;
-default_graph_appearance.major_gridlines_thickness = 1.0;
-default_graph_appearance.major_gridlines_color.r = 0.0;
-default_graph_appearance.major_gridlines_color.g = 0.0;
-default_graph_appearance.major_gridlines_color.b = 0.0;
-default_graph_appearance.minor_gridlines_thickness = 1.0;
-default_graph_appearance.minor_gridlines_color.r = 0.0;
-default_graph_appearance.minor_gridlines_color.g = 0.0;
+default_graph_appearance.background_color.r = 0.9;
+default_graph_appearance.background_color.g = 0.9;
+default_graph_appearance.background_color.b = 0.9;
+default_graph_appearance.major_gridlines_thickness = 4.0;
+default_graph_appearance.major_gridlines_color.r = 0.5;
+default_graph_appearance.major_gridlines_color.g = 0.5;
+default_graph_appearance.major_gridlines_color.b = 0.5;
+default_graph_appearance.minor_gridlines_thickness = 2.0;
+default_graph_appearance.minor_gridlines_color.r = 0.6;
+default_graph_appearance.minor_gridlines_color.g = 0.6;
 default_graph_appearance.minor_gridlines_color.b = 1.0;
 default_graph_appearance.tick_labels_font.name = "Liberation Serif";
-default_graph_appearance.tick_labels_font.size = 12.0;
+default_graph_appearance.tick_labels_font.size = 20.0;
 default_graph_appearance.tick_labels_font.slant = CAIRO_FONT_SLANT_NORMAL;
 default_graph_appearance.tick_labels_font.weight = CAIRO_FONT_WEIGHT_NORMAL;
 default_graph_appearance.tick_labels_color.r = 0.0;
 default_graph_appearance.tick_labels_color.g = 0.3;
 default_graph_appearance.tick_labels_color.b = 0.0;
-default_graph_appearance.axis_labels_font.name = "Liberation Serif";
-default_graph_appearance.axis_labels_font.size = 10.0;
+default_graph_appearance.axis_labels_font.name = "Liberation Sans";
+default_graph_appearance.axis_labels_font.size = 25.0;
 default_graph_appearance.axis_labels_font.slant = CAIRO_FONT_SLANT_NORMAL;
 default_graph_appearance.axis_labels_font.weight = CAIRO_FONT_WEIGHT_NORMAL;
-default_graph_appearance.axis_labels_color.r = 1.0;
-default_graph_appearance.axis_labels_color.g = 0.0;
-default_graph_appearance.axis_labels_color.b = 0.0;
-default_graph_appearance.traces_thickness = 2.0;
+default_graph_appearance.axis_labels_color.r = 0.5;
+default_graph_appearance.axis_labels_color.g = 0.5;
+default_graph_appearance.axis_labels_color.b = 0.2;
+default_graph_appearance.traces_thickness = 4.0;
 default_graph_appearance.traces_color.r = 0.2;
 default_graph_appearance.traces_color.g = 0.6;
 default_graph_appearance.traces_color.b = 1.0;
@@ -1340,23 +1334,80 @@ default_graph_appearance.distance_axis_labels_to_tick_labels = 1;
 default_graph_appearance.distance_tick_labels_to_gridlines = 1;
 
 //ПРИ ДВОЙНОМ ВЫЗОВЕ ТЕПЕРЬ НОРМАЛЬНО
-graph_set_appearance(default_graph_appearance);	//(36)
-graph_set_appearance(default_graph_appearance);	//(36)
+graph_appearance_set(default_graph_appearance);	//(36)
+graph_appearance_set(default_graph_appearance);	//(36)
 
-char *y_tick_labels_2[] = {"10", "20", "30", "40", "50"};
-char *x_tick_labels_2[] = {"10^0", "10^1", "10^2", "10^3", "10^4", "10^5"};
+char *y_tick_labels_1 = {"1y1\t1y2"};
+char *x_tick_labels_1 = {"1x1\t1x2\t1x3"};
+struct point trace_points_1[3] = {{-1, -5}, {0, 5}, {1, -5}};	//!Способ заполнения сомнительный
+
+struct graph graph1;	//(36)
+graph1.y_scale = LIN;
+graph1.x_scale = LIN;
+graph1.y_number_of_major_grids = 1;
+graph1.x_number_of_major_grids = 2;
+graph1.y_number_of_minor_grids = 1;
+graph1.x_number_of_minor_grids = 1;
+graph1.y_tick_labels = y_tick_labels_1;
+graph1.x_tick_labels = x_tick_labels_1;
+graph1.y_axis_label = "Y1";
+graph1.x_axis_label = "X1";
+graph1.y_value_min = -5;
+graph1.y_value_max = 5;
+graph1.x_value_min = -3;
+graph1.x_value_max = 5;
+graph1.trace_number_of_points = 3;
+graph1.trace_points = trace_points_1;
+
+char *y_tick_labels_2 = {"2y1\t2y20\t2y300\t2y400"};
+char *x_tick_labels_2 = {"2x1\t2x2\t2x3"};
+struct point trace_points_2[3] = {{-5, 0}, {0, -3}, {5, 0}};	//!Способ заполнения сомнительный
 
 struct graph graph2;	//(36)
 graph2.y_scale = LOG;
 graph2.x_scale = LOG;
-graph2.y_number_of_major_grids = 4;
-graph2.x_number_of_major_grids = 5;
-graph2.y_number_of_minor_grids = 6;
-graph2.x_number_of_minor_grids = 12;
+graph2.y_number_of_major_grids = 3;
+graph2.x_number_of_major_grids = 2;
+graph2.y_number_of_minor_grids = 2;
+graph2.x_number_of_minor_grids = 2;
 graph2.y_tick_labels = y_tick_labels_2;
 graph2.x_tick_labels = x_tick_labels_2;
-graph2.y_axis_label = "Ось Y";
-graph2.x_axis_label = "Ось X";
+graph2.y_axis_label = "Y2";
+graph2.x_axis_label = "X2";
+graph2.y_value_min = -5;
+graph2.y_value_max = 5;
+graph2.x_value_min = -3;
+graph2.x_value_max = 5;
+graph2.trace_number_of_points = 3;
+graph2.trace_points = trace_points_2;
+
+char *y_tick_labels_4 = {"2\ttick4\ttick5\ttick6\ttick7\ttick8"};
+
+char *y_tick_labels_3 = {"0\t1\t4\t3\t40"};	//Если они одинаковой протяжённости, то нормально. Если нет - по бороде
+char *x_tick_labels_3 = {"2\t11\t22\t33333321"};//С этой двойки перескакивает на двойку массива tick4, так как у них одинаковый адрес
+struct point trace_points_3[11] = {{0.1, 460}, {0.2, 450}, {0.4, 425}, {0.6, 400}, {1, 360}, {10, 170}, {30, 105}, {70, 75}, {200, 45}, {300, 40}, {650, 40}};	//!Способ заполнения сомнительный
+
+//Полулогарифмический:
+//Cree C3D10065A
+//Fig. 6. Capacitance vs. Reverse Voltage
+struct graph graph3;	//(36)
+graph3.y_scale = LIN;
+graph3.x_scale = LIN;//LOG
+graph3.y_number_of_major_grids = 4;
+graph3.x_number_of_major_grids = 3;	//Не влияет при лог, но может влиять на выделение памяти
+graph3.y_number_of_minor_grids = 2;	//Не влияет при лог
+graph3.x_number_of_minor_grids = 2;	//Не влияет при лог
+graph3.y_tick_labels = y_tick_labels_3;
+graph3.x_tick_labels = x_tick_labels_3;
+graph3.y_axis_label = "Y3";
+graph3.x_axis_label = "X3ИКС";
+graph3.y_value_min = 0;
+graph3.y_value_max = 500;
+graph3.x_value_min = 0.1;	//В оригинале 0, но так не бывает
+graph3.x_value_max = 1000;
+graph3.trace_number_of_points = 11;
+graph3.trace_points = trace_points_3;
+
 
 /*g_print ("ИСХОДНЫЕ АДРЕСА:\n");
 g_print ("Y TICK LABELS:\n");
@@ -1396,8 +1447,25 @@ g_print("Сейчас будет gtk_widget_show_all\n");
 //Графики обязательно нужно чертить после show_all (наверное хотябы area дб show)
 //Иначе get_size_request выдает нули и всё по бороде
 //Кроме того, если менять size_request в процессе выполнения проги не из graph, то нужно обновлять график функцией graph, чтобы учлись новые размеры
-gtk_widget_set_size_request (drawing_area_graph2, 300, 100);
-graph(GTK_DRAWING_AREA(drawing_area_graph2), graph2);	//(36)
+gtk_widget_set_size_request (drawing_area_graph1, 20, 30);
+gtk_widget_set_size_request (drawing_area_graph2, 10, 5);
+gtk_widget_set_size_request (drawing_area_graph3, 30, 20);
+graph_plot(GTK_DRAWING_AREA(drawing_area_graph1), graph1);	//new
+graph_plot(GTK_DRAWING_AREA(drawing_area_graph2), graph2);
+//char_array_print ();	//(36)
+
+graph_plot(GTK_DRAWING_AREA(drawing_area_graph3), graph3);	//new
+//char_array_print ();
+
+//Сейчас GRAPH_UPDATE прекрасно работает
+//graph_plot(GTK_DRAWING_AREA(drawing_area_graph1), graph3);	//(36)
+//graph_plot(GTK_DRAWING_AREA(drawing_area_graph2), graph3);	//(36)
+
+//Проверка удаления (прекрасно работает):
+//graph_delete(GTK_DRAWING_AREA(drawing_area_graph2));
+
+//Печать массива символов:
+//char_array_print();
 
 /*//Пример получения size_request
 GtkRequisition mins;
