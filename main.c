@@ -63,27 +63,27 @@ static void console_print(char *line)
 //Функция записи исходных данных в глобальные переменные:
 static void input_data_get()
 {
-	//Выходное напряжение (В);
+	//Выходное напряжение (В):
 	Vout_min = strtod(gtk_entry_get_text(GTK_ENTRY(entry_input_vout_min)), NULL);
 	Vout_nom = strtod(gtk_entry_get_text(GTK_ENTRY(entry_input_vout_nom)), NULL);
 	Vout_max = strtod(gtk_entry_get_text(GTK_ENTRY(entry_input_vout_max)), NULL);
 	Vout_tol = strtod(gtk_entry_get_text(GTK_ENTRY(entry_input_vout_tol)), NULL);
-	//Ток нагрузки (А);
+	//Ток нагрузки (А):
 	Iout = strtod(gtk_entry_get_text(GTK_ENTRY(entry_input_iout_max)), NULL);
-	//КПД (безразмерная величина);
+	//КПД (безразмерная величина):
 	eta = strtod(gtk_entry_get_text(GTK_ENTRY(entry_input_eta_nom)), NULL);
-	//Частота преобразования (кГц -> Гц);
+	//Частота преобразования (кГц -> Гц):
 	f_min = 1e+3 * strtod(gtk_entry_get_text(GTK_ENTRY(entry_input_f_min)), NULL);
 	f_nom = 1e+3 * strtod(gtk_entry_get_text(GTK_ENTRY(entry_input_f_nom)), NULL);
 	f_max = 1e+3 * strtod(gtk_entry_get_text(GTK_ENTRY(entry_input_f_max)), NULL);
 	f_tol = 1e+3 * strtod(gtk_entry_get_text(GTK_ENTRY(entry_input_f_tol)), NULL);
-	//Максимальный рабочий цикл (безразмерная величина);
+	//Максимальный рабочий цикл (безразмерная величина):
 	D_max_min = strtod(gtk_entry_get_text(GTK_ENTRY(entry_input_d_min)), NULL);
 	D_max_max = strtod(gtk_entry_get_text(GTK_ENTRY(entry_input_d_max)), NULL);
-	//Температура окружающей среды (°C);
+	//Температура окружающей среды (°C):
 	t_min = strtod(gtk_entry_get_text(GTK_ENTRY(entry_input_t_min)), NULL);
 	t_max = strtod(gtk_entry_get_text(GTK_ENTRY(entry_input_t_max)), NULL);
-	//Действующее значение входного напряжения (В);
+	//Действующее значение входного напряжения (В):
 	Vin_min = strtod(gtk_entry_get_text(GTK_ENTRY(entry_input_vin_min)), NULL);
 	Vin_nom = strtod(gtk_entry_get_text(GTK_ENTRY(entry_input_vin_nom)), NULL);
 	Vin_max = strtod(gtk_entry_get_text(GTK_ENTRY(entry_input_vin_max)), NULL);
